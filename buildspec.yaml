@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+    pre_build:
+          commands:
+            - echo "Logging in to Amazon ECR..."
+            - $(aws ecr get-login --no-include-email --region us-east-1) # Replace with your region
+    build:
+          commands:
+            - echo "Building the Docker image..."
+            - docker build -t html:1 . # Replace with your desired image name
+
+    post_build:
+          commands:
+            - echo "Tagging the Docker image..."
+            - docker tag html:1 339712907778.dkr.ecr.eu-east-1.amazonaws.com/project/html:latest # Replace with your account ID, region, and repo name
+            - echo "Pushing the Docker image to ECR..."
+            - docker push 339712907778.dkr.ecr.eu-east-1.amazonaws.com/project/html:latest # Replace with your account ID, region, and repo name
